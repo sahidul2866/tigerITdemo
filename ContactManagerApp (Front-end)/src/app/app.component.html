@@ -1,0 +1,182 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" style="color:white;">Contact Manager</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
+    aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarColor02">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" (click)="onOpenModal(deleteContact, 'add')">Add Contact <span
+            class="sr-only">(current)</span></a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<div class="container" id='main-container'>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="main-box clearfix">
+        <div class="table-responsive">
+          <table class="table user-list">
+            <thead>
+              <tr>
+                <th><span>Name</span></th>
+                <th><span>Phone</span></th>
+                <th class="text-center"><span>Addresss</span></th>
+                <th><span>Email</span></th>
+                <th>&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let contact of contacts">
+                <td>
+                  <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                  <a href="#" class="user-link">{{contact.name}}</a>
+                  <span class="user-subhead">Admin</span>
+                </td>
+                <td>
+                  {{contact.phone}}
+                </td>
+                <td class="text-center">
+                  <span class="label label-default">Inactive</span>
+                </td>
+                <td>
+                  <a href="#">{{contact.email}}</a>
+                </td>
+                <td style="width: 20%;">
+                  <a (click)="onOpenModal(contact, 'edit')" class="table-link">
+                    <span class="fa-stack">
+                      <i class="fa fa-square fa-stack-2x"></i>
+                      <i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
+                    </span>
+                  </a>
+                  <a (click)="onOpenModal(contact, 'delete')" class="table-link danger">
+                    <span class="fa-stack">
+                      <i class="fa fa-square fa-stack-2x"></i>
+                      <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>
+                    </span>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ul class="pagination pull-right">
+          <li><a href="#"><i class="fa fa-chevron-left"></i></a></li>
+          <li><a href="#">1</a></li>
+          <li><a href="#">2</a></li>
+          <li><a href="#">3</a></li>
+          <li><a href="#">4</a></li>
+          <li><a href="#">5</a></li>
+          <li><a href="#"><i class="fa fa-chevron-right"></i></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Contact Modal -->
+<div class="modal fade" id="addContactModal" tabindex="-1" role="dialog" aria-labelledby="addContactModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addContactModalLabel">Add Contact</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #addForm="ngForm" (ngSubmit)="onAddContact(addForm)">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" ngModel name="name" class="form-control" id="name" placeholder="Name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" ngModel name="email" class="form-control" id="email" placeholder="Email" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="text" ngModel name="phone" class="form-control" id="phone" placeholder="Phone" required>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="add-contact-form" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Edit Modal -->
+<div class="modal fade" id="updateContactModal" tabindex="-1" role="dialog" aria-labelledby="contactEditModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateContactModalLabel">Edit Contact {{editContact?.name}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #editForm="ngForm">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" ngModel="{{editContact?.name}}" name="name" class="form-control" id="name"
+              aria-describedby="emailHelp" placeholder="Name">
+          </div>
+          <input type="hidden" ngModel="{{editContact?.id}}" name="id" class="form-control" id="id" placeholder="Email">
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" ngModel="{{editContact?.email}}" name="email" class="form-control" id="email"
+              placeholder="Email">
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="text" ngModel="{{editContact?.phone}}" name="phone" class="form-control" id="phone"
+              name="phone" placeholder="Phone">
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="" data-dismiss="modal" class="btn btn-secondary">Close</button>
+            <button (click)="onUpdateContact(editForm.value)" data-dismiss="modal" class="btn btn-primary">Save
+              changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteContactModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModelLabel">Delete Contact</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete contact {{deleteContact?.name}}?</p>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+          <button (click)="onDeleteContact(deleteContact.id)" class="btn btn-danger" data-dismiss="modal">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Notification for no contacts -->
+<div *ngIf="contacts?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+  <div class="alert alert-info" role="alert">
+    <h4 class="alert-heading">NO Contacts!</h4>
+    <p>No Contacts were found.</p>
+  </div>
+</div>
